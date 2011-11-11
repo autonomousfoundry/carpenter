@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+require File.join(File.dirname(__FILE__), "../lib/provisioner.rb")
+
+provisioner = Provisioner.new
+provisioner.load_specifications File.join(Dir.pwd, "abilities.json")
+provisioner.load_abilities File.join(Dir.pwd, "abilities/**/*.rb")
+provisioner.load_strategies File.join(Dir.pwd, "strategies/**/*.rb")
+provisioner.run
