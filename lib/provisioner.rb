@@ -1,4 +1,5 @@
 require 'json'
+require_relative 'carpenter'
 
 class Provisioner
   def load_specifications(file)
@@ -23,8 +24,8 @@ class Provisioner
 
   def run
     @ability_specifications.each do |specification|
-      @ability = find_ability(specification["ability"])
-      @ability.new.verify(specification["options"])
+      verifier = Carpenter::Provisioning.get_verifier(specification["ability"])
+      verifier.call specification["options"]
     end
   end
 end

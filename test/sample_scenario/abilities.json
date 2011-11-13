@@ -1,6 +1,6 @@
 [
   {
-    "ability": "SampleFileExists",
+    "ability": "sample_file_exists",
     "options": {"version": 1}
   }
 ]
