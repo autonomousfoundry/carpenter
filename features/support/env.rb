@@ -1,12 +1,9 @@
 Before do
-  @workspace = "cucumber_temp"
-  FileUtils.mkdir_p @workspace
-  FileUtils.rm_r @workspace, :secure => true
-  FileUtils.mkdir_p @workspace
+  @workspace = CucumberWorkspace.new("cucumber_temp")
 end
 
 After do |scenario|
-  FileUtils.rm_r @workspace, :secure => true unless scenario.failed?
+  @workspace.clear unless scenario.failed?
 end
 
 World Test::Unit::Assertions
