@@ -14,10 +14,8 @@ end
 END
 end
 
-When "I invoke the verify operation" do
-  @workspace.chdir do
-    `../bin/provision`
-  end
+When "I invoke the provisioner" do
+  @workspace.chdir { `../bin/provision` }
 end
 
 Then "I should see that the verify step was run" do
