@@ -18,3 +18,10 @@ Feature: provision
     When I invoke the provisioner
     And I should see that the provisioning succeeded
     And the temp file should exist
+
+  Scenario: Verification is run again after building
+    Given a requirement
+    And a verification that fails
+    And a plan that creates the temp file
+    When I invoke the provisioner
+    Then I should see that the verification failed

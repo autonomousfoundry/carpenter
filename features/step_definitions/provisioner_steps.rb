@@ -37,6 +37,10 @@ Then "I should see that the provisioning succeeded" do
   assert_match /Provisioning complete/, @provisioner_output
 end
 
+Then "I should see that the verification failed" do
+  assert_match /Verification failed/, @provisioner_output
+end
+
 Then "the temp file should exist" do
   assert @workspace.exists? "temp_file"
 end

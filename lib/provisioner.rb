@@ -24,12 +24,13 @@ class Provisioner
           plan = @plans[name]
           raise "No plan found for '#{name}'" unless plan
           plan.call options
+          raise "Verification failed for '#{name}'" unless verifier.call options
         end
       end
+      puts "Provisioning complete."
     rescue
       puts $!
     end
-    puts "Provisioning complete."
   end
 
   def verify(ability_name, &block)
