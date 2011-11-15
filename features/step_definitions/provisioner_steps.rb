@@ -3,15 +3,12 @@ Given "a requirement" do
 end
 
 Given "a verification for the requirement" do
-  @workspace.write "requirements/sample_file_exists.rb", <<END
-require 'fileutils'
-class SampleFileExists
-  extend Carpenter::Provisioning
-  verify :sample_file_exists do |options|
-    FileUtils.touch "sample.file"
-  end
-end
-END
+  @workspace.write "requirements/sample_file_exists.rb", <<-END
+    require 'fileutils'
+    verify :sample_file_exists do |options|
+      FileUtils.touch "sample.file"
+    end
+  END
 end
 
 When "I invoke the provisioner" do
