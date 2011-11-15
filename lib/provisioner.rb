@@ -3,10 +3,10 @@ require_relative 'carpenter'
 
 class Provisioner
   def load_specifications(file)
-    @ability_specifications = JSON.parse File.read(file)
+    @requirement_specifications = JSON.parse File.read(file)
   end
 
-  def load_abilities(path)
+  def load_requirements(path)
     Dir[path].each do |file_name|
       require file_name
     end
@@ -18,13 +18,13 @@ class Provisioner
     end
   end
 
-  def find_ability(ability_name)
-    self.class.const_get ability_name
+  def find_requirement(requirement_name)
+    self.class.const_get requirement_name
   end
 
   def run
-    @ability_specifications.each do |specification|
-      verifier = Carpenter::Provisioning.get_verifier(specification["ability"])
+    @requirement_specifications.each do |specification|
+      verifier = Carpenter::Provisioning.get_verifier(specification["requirement"])
       verifier.call specification["options"]
     end
   end

@@ -1,9 +1,9 @@
-Given "a required ability" do
-  @workspace.write "abilities.json", '[{"ability": "sample_file_exists"}]'
+Given "a requirement" do
+  @workspace.write "requirements.json", '[{"requirement": "sample_file_exists"}]'
 end
 
-Given "a verification for the ability" do
-  @workspace.write "abilities/sample_file_exists.rb", <<END
+Given "a verification for the requirement" do
+  @workspace.write "requirements/sample_file_exists.rb", <<END
 require 'fileutils'
 class SampleFileExists
   extend Carpenter::Provisioning

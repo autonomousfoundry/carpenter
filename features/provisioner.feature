@@ -1,8 +1,8 @@
 Feature: provision
 
   Scenario: verify
-    Given a required ability
-    And a verification for the ability
+    Given a requirement
+    And a verification for the requirement
     When I invoke the provisioner
     Then I should see that the verify step was run
 
