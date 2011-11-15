@@ -2,34 +2,41 @@ require 'json'
 
 class Provisioner
   def load_specifications(file)
-    @requirement_specifications = JSON.parse File.read(file)
+    @specifications = JSON.parse File.read(file)
     @verifiers = {}
+    @plans = {}
   end
 
-  def load_requirements(path)
+  def load_definitions(path)
     Dir[path].each do |file_name|
       instance_eval File.read(file_name)
     end
   end
 
-  def load_strategies(path)
-    Dir[path].each do |file_name|
-      require file_name
-    end
-  end
-
-  def find_requirement(requirement_name)
-    self.class.const_get requirement_name
-  end
-
   def run
-    @requirement_specifications.each do |specification|
-      verifier = @verifiers[specification["requirement"]]
-      verifier.call specification["options"]
+    begin
+      @specifications.each do |specification|
+        name = specification["requirement"]
+        options = specification["options"]
+        verifier = @verifiers[name]
+        raise "No verification found for '#{name}'" unless verifier
+        unless verifier.call options
+          plan = @plans[name]
+          raise "No plan found for '#{name}'" unless plan
+          plan.call options
+        end
+      end
+    rescue
+      puts $!
     end
+    puts "Provisioning complete."
   end
 
   def verify(ability_name, &block)
     @verifiers[ability_name.to_s] = block
+  end
+
+  def build(ability_name, &block)
+    @plans[ability_name.to_s] = block
   end
 end

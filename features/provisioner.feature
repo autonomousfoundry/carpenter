@@ -1,30 +1,20 @@
 Feature: provision
 
-  Scenario: verify
+  Scenario: A requirement with no verification
     Given a requirement
-    And a verification for the requirement
     When I invoke the provisioner
-    Then I should see that the verify step was run
+    Then I should see that the verification was missing
 
-  @wip
-  Scenario: An ability with no verification
-    Given a required ability
+  Scenario: A requirement that fails verification, with no plan
+    Given a requirement
+    And a verification that fails
     When I invoke the provisioner
-    Then I should see that there was no verification for that ability
+    Then I should see that the plan was missing
 
-  @wip
-  Scenario: An ability that fails verification, with no implementation
-    Given a required ability
-    And a verification for the ability that fails
+  Scenario: A requirement and corresponding plan
+    Given a requirement
+    And a verification that checks for a temp file
+    And a plan that creates the temp file
     When I invoke the provisioner
-    Then I should see that there was no implementation for that ability
-
-  @wip
-  Scenario: An ability that fails verification, with no implementation
-    Given a required ability
-    And a verification for the ability that requires a temp file
-    And an implementation for the ability that creates the temp file
-    When I invoke the provisioner
-    Then I should see that the implementation was run
-    And I should see that the provisioning is complete
+    And I should see that the provisioning succeeded
     And the temp file should exist

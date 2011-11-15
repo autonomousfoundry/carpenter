@@ -3,6 +3,5 @@ require File.join(File.dirname(__FILE__), "../lib/provisioner.rb")
 
 provisioner = Provisioner.new
 provisioner.load_specifications File.join(Dir.pwd, "requirements.json")
-provisioner.load_requirements File.join(Dir.pwd, "requirements/**/*.rb")
-provisioner.load_strategies File.join(Dir.pwd, "strategies/**/*.rb")
+provisioner.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
 provisioner.run
