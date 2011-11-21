@@ -14,23 +14,21 @@ class Provisioner
   end
 
   def run
-    begin
-      @specifications.each do |specification|
-        name = specification["requirement"]
-        options = specification["options"]
-        verifier = @verifiers[name]
-        raise "No verification found for '#{name}'" unless verifier
-        unless verifier.call options
-          plan = @plans[name]
-          raise "No plan found for '#{name}'" unless plan
-          plan.call options
-          raise "Verification failed for '#{name}'" unless verifier.call options
-        end
+    @specifications.each do |specification|
+      name = specification["requirement"]
+      options = specification["options"]
+      verifier = @verifiers[name]
+      raise "No verification found for '#{name}'" unless verifier
+      unless verifier.call options
+        plan = @plans[name]
+        raise "No plan found for '#{name}'" unless plan
+        plan.call options
+        raise "Verification failed for '#{name}'" unless verifier.call options
       end
-      puts "Provisioning complete."
-    rescue
-      puts $!
     end
+    puts "Provisioning complete."
+  rescue
+    puts $!
   end
 
   def verify(ability_name, &block)
