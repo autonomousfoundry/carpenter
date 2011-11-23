@@ -21,24 +21,24 @@ Given "a plan that creates the temp file" do
   END
 end
 
-When "I invoke the provisioner" do
-  @workspace.chdir { @provisioner_output = `provision` }
+When "I invoke the build" do
+  @workspace.chdir { @build_output = `carpenter` }
 end
 
 Then "I should see that the verification was missing" do
-  assert_match /No verification found/, @provisioner_output
+  assert_match /No verification found/, @build_output
 end
 
 Then "I should see that the plan was missing" do
-  assert_match /No plan found/, @provisioner_output
+  assert_match /No plan found/, @build_output
 end
 
-Then "I should see that the provisioning succeeded" do
-  assert_match /Provisioning complete/, @provisioner_output
+Then "I should see that the build succeeded" do
+  assert_match /Build complete/, @build_output
 end
 
 Then "I should see that the verification failed" do
-  assert_match /Verification failed/, @provisioner_output
+  assert_match /Verification failed/, @build_output
 end
 
 Then "the temp file should exist" do

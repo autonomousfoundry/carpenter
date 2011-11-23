@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require "carpenter"
+
+build = Carpenter::Build.new
+build.load_specifications File.join(Dir.pwd, "requirements.json")
+build.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
+build.run

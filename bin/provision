@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-require "rubygems"
-require "provisioner"
-
-provisioner = Provisioner.new
-provisioner.load_specifications File.join(Dir.pwd, "requirements.json")
-provisioner.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
-provisioner.run

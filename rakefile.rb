@@ -15,17 +15,19 @@ require 'rake/clean'
 CLEAN.include "*.gem"
 
 require 'rake/testtask'
+task :units => :build
 Rake::TestTask.new(:units) do |t|
   t.libs << 'test'
   t.pattern = 'test/**/*_test.rb'
 end
 
 require 'cucumber/rake/task'
+task :cucumber => :build
 Cucumber::Rake::Task.new 'cucumber' do |t|
   t.cucumber_opts = %w{--format progress}
 end
 
-desc "Run tests"
+desc "Run tests & features"
 task :test => %w[units cucumber]
 
 task :default => :test

@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   # If you need an executable, add it here
-  s.executables = ["provision"]
+  s.executables = ["carpenter"]
 
   # If you have C extensions, uncomment this line
   # s.extensions = "ext/extconf.rb"
