@@ -22,7 +22,7 @@ Given "a plan that creates the temp file" do
 end
 
 When "I invoke the provisioner" do
-  @workspace.chdir { @provisioner_output = `../bin/provision` }
+  @workspace.chdir { @provisioner_output = `provision` }
 end
 
 Then "I should see that the verification was missing" do
