@@ -1,25 +1,15 @@
-require 'json'
-
 module Carpenter
   class Build
 
-    def load_specifications(file)
-      @specifications = JSON.parse File.read(file)
-      @verifiers = {}
-      @plans = {}
-    end
-
-    def load_definitions(path)
-      Dir[path].each do |file_name|
-        instance_eval File.read(file_name)
-      end
+    def initialize(specifications, requirements={}, plans={})
+      @specifications, @requirements, @plans = specifications, requirements, plans
     end
 
     def run
       @specifications.each do |specification|
         name = specification["requirement"]
         options = specification["options"]
-        verifier = @verifiers[name]
+        verifier = @requirements[name]
         raise "No verification found for '#{name}'" unless verifier
         unless verifier.call options
           plan = @plans[name]
@@ -33,12 +23,5 @@ module Carpenter
       puts $!
     end
 
-    def verify(ability_name, &block)
-      @verifiers[ability_name.to_s] = block
-    end
-
-    def build(ability_name, &block)
-      @plans[ability_name.to_s] = block
-    end
   end
 end
