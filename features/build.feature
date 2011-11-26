@@ -1,4 +1,4 @@
-Feature: build
+Feature: Build
 
   Scenario: A requirement with no verification
     Given a requirement

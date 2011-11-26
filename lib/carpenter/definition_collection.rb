@@ -5,10 +5,14 @@ module Carpenter
 
     attr_accessor :specifications, :requirements, :plans
 
+    def initialize
+      @plans = {}
+      @requirements = {}
+      @specifications = []
+    end
+
     def load_specifications(file)
       @specifications = JSON.parse File.read(file)
-      @requirements = {}
-      @plans = {}
     end
 
     def load_definitions(path)
@@ -21,8 +25,12 @@ module Carpenter
       @requirements[ability_name.to_s] = block
     end
 
-    def build(ability_name, &block)
-      @plans[ability_name.to_s] = block
+    def build(ability_name, options={}, &block)
+      plan = Plan.new ability_name, &block
+      if options
+        plan.description options[:description] || options['description']
+      end
+      @plans[plan.name] = plan
     end
   end
 end

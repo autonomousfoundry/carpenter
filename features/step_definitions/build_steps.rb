@@ -25,6 +25,10 @@ When "I invoke the build" do
   @workspace.chdir { @build_output = `carpenter` }
 end
 
+Then "show me the output" do
+  puts @workspace.chdir { `carpenter` }
+end
+
 Then "I should see that the verification was missing" do
   assert_match /No verification found/, @build_output
 end

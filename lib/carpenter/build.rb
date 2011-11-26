@@ -15,7 +15,7 @@ module Carpenter
           plan = @plans[name]
           raise "No plan found for '#{name}'" unless plan
           plan.call options
-          raise "Verification failed for '#{name}'" unless verifier.call options
+          raise "Verification failed for '#{plan.description}'" unless verifier.call options
         end
       end
       puts "Build complete."
