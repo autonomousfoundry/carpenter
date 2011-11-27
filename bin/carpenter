@@ -6,7 +6,7 @@ require 'optparse'
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: carpenter COMMAND [options]"
-  opts.on("-o", "--output=[TYPE]", [:tree, :xml], "Output type for show command (tree, xml)"){|o|options[:output] = o }
+  opts.on("-o", "--output=[TYPE]", [:tree, :xml], "Output type for show & verify commands (tree, xml)"){|o|options[:output] = o }
 end.parse!
 
 command = ARGV.shift || 'build'
@@ -14,10 +14,13 @@ command = ARGV.shift || 'build'
 definitions = Carpenter::DefinitionCollection.new
 definitions.load_requirements File.join(Dir.pwd, "requirements.json")
 definitions.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
+tree = Carpenter::Tree.new(definitions.requirements, definitions.verifications, definitions.plans)
 
 case command
+when 'verify'
+  tree.verifier = true
+  puts tree.output options[:output]
 when 'show'
-  tree = Carpenter::Tree.new(definitions.requirements, definitions.verifications, definitions.plans)
   puts tree.output options[:output]
 when 'build'
   build = Carpenter::Build.new(definitions.requirements, definitions.verifications, definitions.plans)

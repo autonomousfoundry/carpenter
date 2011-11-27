@@ -1,6 +1,8 @@
 module Carpenter
   class Tree < Command
 
+    attr_accessor :verifier
+
     module TagLess
       def _start_tag(sym, attrs, end_too=false)
         @target << "#{sym}: "
@@ -25,10 +27,23 @@ module Carpenter
       TagLess.send :extend_object, xml_builder
     end
 
+    def current_builder
+      @builders.last
+    end
+
+    def with_builder(builder)
+      @builders ||= []
+      @builders << builder
+      yield
+    ensure
+      @builders.pop
+    end
+
     def output(format=nil)
-      @builder = format.to_s == 'xml' ? xml_builder : tree_builder
-      process_requirements
-      @builder.target!
+      with_builder format.to_s == 'xml' ? xml_builder : tree_builder do
+        process_requirements
+        current_builder.target!
+      end
     rescue
       puts $!
     end
@@ -41,16 +56,23 @@ module Carpenter
       end
     end
 
-    def process_requirement(name, options, builder=@builder)
+    def process_requirement(name, options)
       plan = plan(name)
-      builder.tag!('requirement') do |b|
-        b.tag! 'name', name
-        b.tag! "options", options unless options.nil?
-        b.tag! "plan", plan.description if plan
-        if plan && plan.requirements.size > 0
-          b.prerequisites do |p|
-            plan.requirements.each do |requirement|
-              process_requirement requirement["requirement"], requirement["options"], p
+      current_builder.tag!('requirement') do |b|
+        with_builder b do
+          current_builder.tag! 'name', name
+          current_builder.tag! "options", options unless options.nil?
+          current_builder.tag! "plan", plan.description if plan
+          if verifier
+            current_builder.tag! "verification", verify(name, options).inspect
+          end
+          if plan && plan.requirements.size > 0
+            current_builder.prerequisites do |p|
+              with_builder p do
+                plan.requirements.each do |requirement|
+                  process_requirement requirement["requirement"], requirement["options"]
+                end
+              end
             end
           end
         end

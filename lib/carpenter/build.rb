@@ -10,14 +10,5 @@ module Carpenter
       puts $!
     end
 
-    def verify(name, options)
-      verification(name).call(options)
-    end
-
-    def build(name, options)
-      plan(name).call(options)
-      true
-    end
-
   end
 end

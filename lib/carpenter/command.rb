@@ -32,6 +32,15 @@ module Carpenter
       raise("Verification failed for '#{plan(name).description}'")
     end
 
+    def verify(name, options)
+      verification(name).call(options)
+    end
+
+    def build(name, options)
+      plan(name).call(options)
+      true
+    end
+
     def verification(name)
       @verifications[name]
     end
