@@ -1,26 +1,22 @@
 module Carpenter
-  class Build
-
-    def initialize(requirements, verifications={}, plans={})
-      @requirements, @verifications, @plans = requirements, verifications, plans
-    end
+  class Build < Command
 
     def run
-      @requirements.each do |specification|
-        name = specification["requirement"]
-        options = specification["options"]
-        verifier = @verifications[name]
-        raise "No verification found for '#{name}'" unless verifier
-        unless verifier.call options
-          plan = @plans[name]
-          raise "No plan found for '#{name}'" unless plan
-          plan.call options
-          raise "Verification failed for '#{plan.description}'" unless verifier.call options
-        end
+      if Validation.new(@requirements, @verifications, @plans).valid?
+        process_requirements
+        puts "Build complete."
       end
-      puts "Build complete."
     rescue
       puts $!
+    end
+
+    def verify(name, options)
+      verification(name).call(options)
+    end
+
+    def build(name, options)
+      plan(name).call(options)
+      true
     end
 
   end

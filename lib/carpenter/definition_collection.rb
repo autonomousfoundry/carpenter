@@ -29,6 +29,7 @@ module Carpenter
       plan = Plan.new ability_name, &block
       if options
         plan.description options[:description] || options['description']
+        plan.requirements options[:requirements] || options['requirements']
       end
       @plans[plan.name] = plan
     end

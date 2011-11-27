@@ -13,3 +13,11 @@ Feature: Plan
     And a plan with a description that fails to create the temp file
     When I invoke the build
     Then I should see the plan description
+
+   Scenario: A plan with a requirement shows the required plan name on failure
+    Given a requirement
+    And a verification that checks for a temp file
+    And a plan that requires a plan that fails
+    When I invoke the build
+    Then I should see the required plan name
+

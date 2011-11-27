@@ -14,4 +14,9 @@ class DefinitionCollectionTest < Test::Unit::TestCase
     @plan = @definition_collection.build("a_plan", :description => "A Plan with a description"){}
     assert_equal "A Plan with a description", @plan.description
   end
+
+  def test_build_with_requirements_option
+    @plan = @definition_collection.build("a_plan", :requirements => [{'requirement' => 'r1'}]){}
+    assert_equal [{'requirement' => 'r1'}], @plan.requirements
+  end
 end

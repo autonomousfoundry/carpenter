@@ -6,6 +6,8 @@ module Carpenter
   autoload :Plan, "carpenter/plan"
 
   # commands
-  autoload :Build, "carpenter/build" # add commands namespace? carpenter/commands/build.rb
+  autoload :Command,    "carpenter/command"
+  autoload :Build,      "carpenter/build"
+  autoload :Validation, "carpenter/validation"
 
 end
