@@ -18,12 +18,7 @@ definitions.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
 case command
 when 'show'
   tree = Carpenter::Tree.new(definitions.requirements, definitions.verifications, definitions.plans)
-  case options[:output]
-  when :xml
-    puts tree.to_xml
-  else
-    puts tree.to_tree
-  end
+  puts tree.output options[:output]
 when 'build'
   build = Carpenter::Build.new(definitions.requirements, definitions.verifications, definitions.plans)
   build.run

@@ -1,5 +1,3 @@
-require 'builder'
-
 module Carpenter
   class Tree < Command
 
@@ -16,17 +14,23 @@ module Carpenter
       end
     end
 
-    def to_xml
-      @builder = Builder::XmlMarkup.new :indent => 2
-      process_requirements
-      @builder.target!
+    def xml_builder
+      require 'builder'
+      Builder::XmlMarkup.new :indent => 2
+    rescue LoadError
+      raise "Can't load builder, gem install builder"
     end
 
-    def to_tree
-      @builder = Builder::XmlMarkup.new :indent => 2
-      TagLess.send :extend_object, @builder
+    def tree_builder
+      TagLess.send :extend_object, xml_builder
+    end
+
+    def output(format=nil)
+      @builder = format.to_s == 'xml' ? xml_builder : tree_builder
       process_requirements
       @builder.target!
+    rescue
+      puts $!
     end
 
     def process_requirements
