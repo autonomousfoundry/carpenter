@@ -1,15 +1,15 @@
 module Carpenter
   class Build
 
-    def initialize(specifications, requirements={}, plans={})
-      @specifications, @requirements, @plans = specifications, requirements, plans
+    def initialize(requirements, verifications={}, plans={})
+      @requirements, @verifications, @plans = requirements, verifications, plans
     end
 
     def run
-      @specifications.each do |specification|
+      @requirements.each do |specification|
         name = specification["requirement"]
         options = specification["options"]
-        verifier = @requirements[name]
+        verifier = @verifications[name]
         raise "No verification found for '#{name}'" unless verifier
         unless verifier.call options
           plan = @plans[name]

@@ -2,11 +2,10 @@
 require 'rubygems'
 require "carpenter"
 
-
 definitions = Carpenter::DefinitionCollection.new
-definitions.load_specifications File.join(Dir.pwd, "requirements.json")
+definitions.load_requirements File.join(Dir.pwd, "requirements.json")
 definitions.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
 
-build = Carpenter::Build.new(definitions.specifications, definitions.requirements, definitions.plans)
+build = Carpenter::Build.new(definitions.requirements, definitions.verifications, definitions.plans)
 build.run
 

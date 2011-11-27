@@ -3,16 +3,16 @@ require 'json'
 module Carpenter
   class DefinitionCollection
 
-    attr_accessor :specifications, :requirements, :plans
+    attr_accessor :requirements, :verifications, :plans
 
     def initialize
       @plans = {}
-      @requirements = {}
-      @specifications = []
+      @verifications = {}
+      @requirements = []
     end
 
-    def load_specifications(file)
-      @specifications = JSON.parse File.read(file)
+    def load_requirements(file)
+      @requirements = JSON.parse File.read(file)
     end
 
     def load_definitions(path)
@@ -22,7 +22,7 @@ module Carpenter
     end
 
     def verify(ability_name, &block)
-      @requirements[ability_name.to_s] = block
+      @verifications[ability_name.to_s] = block
     end
 
     def build(ability_name, options={}, &block)
