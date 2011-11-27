@@ -9,5 +9,6 @@ module Carpenter
   autoload :Command,    "carpenter/command"
   autoload :Build,      "carpenter/build"
   autoload :Validation, "carpenter/validation"
+  autoload :Tree,       "carpenter/tree"
 
 end
