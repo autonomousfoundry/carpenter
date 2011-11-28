@@ -30,3 +30,9 @@ Feature: Build
     Given a requirement in an alternate file
     When I invoke the build with an alternate file
     Then I should see that the verification was missing
+
+  Scenario: Specify an alternate definitions directory
+    Given a requirement
+    And a verification in an alternate folder that fails
+    When I invoke the build with an alternate directory
+    Then I should see that the plan was missing

@@ -7,16 +7,20 @@ options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: carpenter COMMAND [options]"
   opts.on("-o", "--output=TYPE", [:tree, :xml], "Output type for show & verify commands (tree, xml)"){|o| options[:output] = o }
-  opts.on("-r", "--requirements=FILE", "Use an alternate location of requirements.json"){|o| options[:requirements] = o }
+  opts.on("-r", "--requirements=FILE", "Use an alternate location for requirements.json"){|o| options[:requirements] = o }
+  opts.on("-d", "--definitions=DIRECTORY", "Use an alternate location for the definitions"){|o| options[:definitions] = o }
 end.parse!
 
 command = ARGV.shift || 'build'
 requirements = options[:requirements] || File.join(Dir.pwd, "requirements.json")
+definitions_directory = options[:definitions]  || File.join(Dir.pwd, "requirements/**/*.rb")
 
 definitions = Carpenter::DefinitionCollection.new
 definitions.load_requirements requirements
-definitions.load_definitions File.join(Dir.pwd, "requirements/**/*.rb")
+definitions.load_definitions definitions_directory
+
 tree = Carpenter::Tree.new(definitions.requirements, definitions.verifications, definitions.plans)
+build = Carpenter::Build.new(definitions.requirements, definitions.verifications, definitions.plans)
 
 case command
 when 'verify'
@@ -25,7 +29,6 @@ when 'verify'
 when 'show'
   puts tree.output options[:output]
 when 'build'
-  build = Carpenter::Build.new(definitions.requirements, definitions.verifications, definitions.plans)
   build.run
 end
 

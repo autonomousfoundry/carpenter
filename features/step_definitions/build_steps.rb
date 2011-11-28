@@ -12,6 +12,12 @@ Given "a verification that fails" do
   END
 end
 
+Given "a verification in an alternate folder that fails" do
+  @workspace.write "other_definitions/verify.rb", <<-END
+    verify(:my_requirement) { |options| false }
+  END
+end
+
 Given "a verification that checks for a temp file" do
   @workspace.write "requirements/verify.rb", <<-END
     verify(:my_requirement) { |options| File.exists? "temp_file" }
@@ -31,6 +37,10 @@ end
 
 When "I invoke the build with an alternate file" do
   @workspace.chdir { @build_output = `carpenter --requirements=alternate_requirements.json` }
+end
+
+When "I invoke the build with an alternate directory" do
+  @workspace.chdir { @build_output = `carpenter --definitions=other_definitions/**/*.rb` }
 end
 
 Then "show me the output" do
