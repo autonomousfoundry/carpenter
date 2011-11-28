@@ -25,3 +25,8 @@ Feature: Build
     And a plan that creates the temp file
     When I invoke the build
     Then I should see that the verification failed
+
+  Scenario: Specify an alternate requirements file
+    Given a requirement in an alternate file
+    When I invoke the build with an alternate file
+    Then I should see that the verification was missing

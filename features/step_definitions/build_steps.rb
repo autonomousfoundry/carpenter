@@ -2,6 +2,10 @@ Given "a requirement" do
   @workspace.write "requirements.json", '[{"requirement": "my_requirement"}]'
 end
 
+Given "a requirement in an alternate file" do
+  @workspace.write "alternate_requirements.json", '[{"requirement": "my_requirement"}]'
+end
+
 Given "a verification that fails" do
   @workspace.write "requirements/verify.rb", <<-END
     verify(:my_requirement) { |options| false }
@@ -23,6 +27,10 @@ end
 
 When "I invoke the build" do
   @workspace.chdir { @build_output = `carpenter` }
+end
+
+When "I invoke the build with an alternate file" do
+  @workspace.chdir { @build_output = `carpenter --requirements=alternate_requirements.json` }
 end
 
 Then "show me the output" do
