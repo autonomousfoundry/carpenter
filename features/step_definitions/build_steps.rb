@@ -8,26 +8,26 @@ end
 
 Given "a verification that fails" do
   @workspace.write "requirements/verify.rb", <<-END
-    verify(:my_requirement) { |options| false }
+    requirement(:my_requirement){ verify{ |options| false } }
   END
 end
 
 Given "a verification in an alternate folder that fails" do
   @workspace.write "other_definitions/verify.rb", <<-END
-    verify(:my_requirement) { |options| false }
+    requirement(:my_requirement){ verify{ |options| false } }
   END
 end
 
 Given "a verification that checks for a temp file" do
   @workspace.write "requirements/verify.rb", <<-END
-    verify(:my_requirement) { |options| File.exists? "temp_file" }
+    requirement(:my_requirement){ verify{ |options| File.exists? "temp_file" } }
   END
 end
 
 Given "a plan that creates the temp file" do
   @workspace.write "requirements/plan.rb", <<-END
     require 'fileutils'
-    build(:my_requirement) { |options| FileUtils.touch "temp_file" }
+    plan(:my_requirement){ build{ FileUtils.touch "temp_file" } }
   END
 end
 

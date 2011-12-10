@@ -1,19 +1,28 @@
 require 'fileutils'
 
-verify :ffmpeg do
-  File.exists? "ffmpeg.installed"
+requirement :ffmpeg do
+  verify do
+    File.exists? "ffmpeg.installed"
+  end
 end
 
-build :ffmpeg do
-  puts "Pretending to compile and install ffmpeg"
-  FileUtils.touch "ffmpeg.installed"
-end.requirements([{"requirement"=>"x264"}])
-
-verify :x264 do
-  File.exists? "x264.installed"
+plan :ffmpeg do
+  requires [{"requirement"=>"x264"}]
+  build do
+    puts "Pretending to compile and install ffmpeg"
+    FileUtils.touch "ffmpeg.installed"
+  end
 end
 
-build :x264 do
-  puts "Pretending to compile and install x264"
-  FileUtils.touch "x264.installed"
+requirement :x264 do
+  verify do
+    File.exists? "x264.installed"
+  end
+end
+
+plan :x264 do
+  build do
+    puts "Pretending to compile and install x264"
+    FileUtils.touch "x264.installed"
+  end
 end

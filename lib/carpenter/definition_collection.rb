@@ -21,17 +21,33 @@ module Carpenter
       end
     end
 
-    def verify(ability_name, &block)
-      @verifications[ability_name.to_s] = block
+    def requirement(requirement_name)
+      @current_requirement_name = requirement_name.to_s
+      yield
+      @current_requirement_name = nil
     end
 
-    def build(ability_name, options={}, &block)
-      plan = Plan.new ability_name, &block
-      if options
-        plan.description options[:description] || options['description']
-        plan.requirements options[:requirements] || options['requirements']
-      end
-      @plans[plan.name] = plan
+    def plan(requirement_name)
+      @current_plan = Plan.new requirement_name
+      yield
+      @plans[requirement_name.to_s] = @current_plan
+      @current_plan = nil
+    end
+
+    def verify(&block)
+      @verifications[@current_requirement_name] = block
+    end
+
+    def build(&block)
+      @current_plan.build = block
+    end
+
+    def description(text)
+      @current_plan.description text
+    end
+
+    def requires(requirements_array)
+      @current_plan.requirements requirements_array
     end
   end
 end

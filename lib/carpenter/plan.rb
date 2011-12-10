@@ -1,10 +1,11 @@
 module Carpenter
   class Plan
 
-    attr_accessor :name, :requirements
+    attr_accessor :name, :requirements, :build
 
     def initialize(name, &block)
-      @name, @build = name.to_s, block
+      @name = name
+      @build = block if block_given?
     end
 
     def description(update=nil)

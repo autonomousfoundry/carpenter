@@ -1,25 +1,25 @@
 Given "a plan that fails to create the temp file" do
   @workspace.write "requirements/plan.rb", <<-END
     require 'fileutils'
-    build(:my_requirement) { |options|  }
+    plan(:my_requirement){ build {} }
   END
 end
 
 Given "a plan with a description that fails to create the temp file" do
   @workspace.write "requirements/plan.rb", <<-END
     require 'fileutils'
-    build(:my_requirement){}.description("My Requirement Description")
+    plan(:my_requirement){ build{}; description("My Requirement Description") }
   END
 end
 
 Given "a plan that requires a plan that fails" do
   @workspace.write "requirements/plan.rb", <<-END
     require 'fileutils'
-    build(:my_requirement){}.requirements([{"requirement" => "other_requirement"}])
+    plan(:my_requirement){ requires [{"requirement" => "other_requirement"}] }
   END
   @workspace.write "requirements/other_verification.rb", <<-END
-    verify(:other_requirement) { |options| false }
-    build(:other_requirement){}
+    requirement(:other_requirement){ verify { |options| false } }
+    plan(:other_requirement){ build {} }
   END
 end
 
