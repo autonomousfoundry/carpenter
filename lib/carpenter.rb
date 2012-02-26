@@ -1,6 +1,6 @@
 module Carpenter
 
-  VERSION = "0.0.0"
+  VERSION = "0.0.0" unless defined?(VERSION)
 
   autoload :DefinitionCollection, "carpenter/definition_collection"
   autoload :Plan, "carpenter/plan"
