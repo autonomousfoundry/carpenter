@@ -27,19 +27,34 @@ module Carpenter
 
     def process_requirement(name, options)
       unless verify(name, options)
-        prerequisites name
+        prerequisites(name)
         build(name, options)
         verify(name, options) || verification_failed(name)
       end
+    rescue => exception
+      handle_exception(exception)
+    end
+
+    def handle_exception(exception)
+      raise exception
+    end
+
+    def plan_requirements(name)
+      p = plan(name)
+      Array(p && p.requirements)
     end
 
     def prerequisites(name)
-      plan = plan(name)
-      if plan && plan.requirements.size > 0
-        plan.requirements.each do |requirement|
-          process_requirement requirement["requirement"], requirement["options"]
-        end
+      plan_requirements(name).each do |requirement|
+        process_requirement requirement["requirement"], requirement["options"]
       end
+    end
+
+    def verify_prerequisites(name)
+      plan_requirements(name).each do |requirement|
+        verify(requirement["requirement"], requirement["options"]) or return false
+      end
+      true
     end
 
     def verification_failed(name)
@@ -47,11 +62,15 @@ module Carpenter
     end
 
     def verify(name, options)
-      verification(name).call(options)
+      if verification(name)
+        verification(name).call(options)
+      else
+        verify_prerequisites(name)
+      end
     end
 
     def build(name, options)
-      plan(name).call(options)
+      plan(name) && plan(name).call(options)
       true
     end
 

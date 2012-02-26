@@ -2,9 +2,11 @@ module Carpenter
   class Build < Command
 
     def run
-      if Validation.new(@requirements, @verifications, @plans).valid?
+      if (validation = Validation.new(@requirements, @verifications, @plans)).valid?
         process_requirements
         succeeded "Build complete."
+      else
+        failed validation.errors
       end
     rescue
       failed $!

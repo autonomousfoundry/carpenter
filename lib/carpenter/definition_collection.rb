@@ -17,7 +17,7 @@ module Carpenter
 
     def load_definitions(path)
       Dir[path].each do |file_name|
-        instance_eval File.read(file_name)
+        instance_eval File.read(file_name), file_name, 0
       end
     end
 

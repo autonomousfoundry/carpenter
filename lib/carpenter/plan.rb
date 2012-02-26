@@ -13,7 +13,7 @@ module Carpenter
         @description = update
         return self
       end
-      @description || name
+      @description || name.to_s
     end
 
     def requirements(update=nil)
@@ -26,7 +26,7 @@ module Carpenter
     end
 
     def call(*args, &block)
-      @build.call *args, &block
+      @build && @build.call(*args, &block)
     end
 
   end
