@@ -4,10 +4,10 @@ module Carpenter
     def run
       if Validation.new(@requirements, @verifications, @plans).valid?
         process_requirements
-        puts "Build complete."
+        succeeded "Build complete."
       end
     rescue
-      puts $!
+      failed $!
     end
 
   end

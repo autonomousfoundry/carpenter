@@ -16,7 +16,7 @@ Feature: Build
     And a verification that checks for a temp file
     And a plan that creates the temp file
     When I invoke the build
-    And I should see that the build succeeded
+    Then I should see that the build succeeded
     And the temp file should exist
 
   Scenario: Verification is run again after building

@@ -26,9 +26,16 @@ case command
 when 'verify'
   tree.verifier = true
   puts tree.output options[:output]
+  @succeeded = tree.succeeded?
 when 'show'
   puts tree.output options[:output]
+  @succeeded = tree.succeeded?
 when 'build'
   build.run
+  @succeeded = build.succeeded?
+else
+  puts "Unknown COMMAND #{command}"
+  @succeeded = false
 end
 
+exit(@succeeded ? 0 : 1)

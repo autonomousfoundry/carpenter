@@ -52,7 +52,7 @@ module Carpenter
       if Validation.new(@requirements, @verifications, @plans).valid?
         super
       else
-        puts "Tree is invalid."
+        failed validation.errors
       end
     end
 

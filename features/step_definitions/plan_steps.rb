@@ -24,14 +24,14 @@ Given "a plan that requires a plan that fails" do
 end
 
 Then %{I should see the required plan name} do
-  assert_match /other_requirement/, @build_output
+  assert_match /other_requirement/, @command_output
 end
 
 Then %{I should see the plan description} do
-  assert_match /My Requirement Description/, @build_output
+  assert_match /My Requirement Description/, @command_output
 end
 
 Then %{I should see the plan name} do
-  assert_match /my_requirement/, @build_output
+  assert_match /my_requirement/, @command_output
 end
 

@@ -5,6 +5,20 @@ module Carpenter
       @requirements, @verifications, @plans = requirements, verifications, plans
     end
 
+    def succeeded(messages=nil)
+      puts Array(messages).join("\n") unless messages.nil?
+      @succeeded = true
+    end
+
+    def succeeded?
+      @succeeded != false
+    end
+
+    def failed(messages=nil)
+      puts Array(messages).join("\n") unless messages.nil?
+      @succeeded = false
+    end
+
     def process_requirements
       @requirements.each do |requirement|
         process_requirement(requirement["requirement"], requirement["options"])
