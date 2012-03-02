@@ -32,35 +32,46 @@ Given "a plan that creates the temp file" do
 end
 
 When "I invoke the build" do
-  @workspace.chdir { @build_output = `carpenter` }
+  step %{I capture the result of the command "carpenter"}
 end
 
 When "I invoke the build with an alternate file" do
-  @workspace.chdir { @build_output = `carpenter --requirements=alternate_requirements.json` }
+  step %{I capture the result of the command "carpenter --requirements=alternate_requirements.json"}
 end
 
 When "I invoke the build with an alternate directory" do
-  @workspace.chdir { @build_output = `carpenter --definitions=other_definitions/**/*.rb` }
+  step %{I capture the result of the command "carpenter --definitions=other_definitions/**/*.rb"}
+end
+
+When %r!I capture the result of the command "([^"]*)"! do |command|
+  @workspace.chdir do
+    @command_output = `#{command}`
+    @command_status = $?.exitstatus
+  end
 end
 
 Then "show me the output" do
-  puts @workspace.chdir { `carpenter` }
+  puts @command_output
 end
 
 Then "I should see that the verification was missing" do
-  assert_match /No verification found/, @build_output
+  assert_match /No verification found/, @command_output
+  assert_equal 1, @command_status
 end
 
 Then "I should see that the plan was missing" do
-  assert_match /No plan found/, @build_output
+  assert_match /No plan found/, @command_output
+  assert_equal 1, @command_status
 end
 
 Then "I should see that the build succeeded" do
-  assert_match /Build complete/, @build_output
+  assert_match /Build complete./, @command_output
+  assert_equal 0, @command_status
 end
 
 Then "I should see that the verification failed" do
-  assert_match /Verification failed/, @build_output
+  assert_match /Verification failed/, @command_output
+  assert_equal 1, @command_status
 end
 
 Then "the temp file should exist" do

@@ -44,15 +44,13 @@ module Carpenter
         process_requirements
         current_builder.target!
       end
-    rescue
-      puts $!
     end
 
     def process_requirements
-      if Validation.new(@requirements, @verifications, @plans).valid?
+      if (validation = Validation.new(@requirements, @verifications, @plans)).valid?
         super
       else
-        puts "Tree is invalid."
+        failed validation.errors
       end
     end
 
@@ -64,7 +62,9 @@ module Carpenter
           current_builder.tag! "options", options unless options.nil?
           current_builder.tag! "plan", plan.description if plan
           if verifier
-            current_builder.tag! "verification", verify(name, options).inspect
+            verification = verify(name, options)
+            failed unless verification
+            current_builder.tag! "verification", verification.inspect
           end
           if plan && plan.requirements.size > 0
             current_builder.prerequisites do |p|

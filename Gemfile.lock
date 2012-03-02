@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     carpenter (0.0.0)
+      json (= 1.6.1)
 
 GEM
   remote: http://rubygems.org/
